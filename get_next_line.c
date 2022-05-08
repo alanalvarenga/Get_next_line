@@ -6,7 +6,7 @@
 /*   By: alachris <alachris@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 02:43:44 by alachris          #+#    #+#             */
-/*   Updated: 2022/05/06 23:58:16 by alachris         ###   ########.fr       */
+/*   Updated: 2022/05/08 04:27:09 by alachris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ static char	*ft_split_acc(char **accumulator)
 	char	*tmp;
 
 	i = 0;
-	if (*accumulator == NULL)
-		return (NULL);
 	while ((accumulator[0][i] != '\0') && (accumulator[0][i] != '\n'))
 		i++;
 	tmp = (char *)malloc(sizeof(char) * (ft_strlen(*accumulator) - i + 1));
@@ -38,6 +36,7 @@ static char	*ft_split_acc(char **accumulator)
 		line = (char *)malloc(sizeof(char) * (i + 1));
 		ft_strlcpy(line, *accumulator, i + 1);
 		free(*accumulator);
+		*accumulator = NULL;
 		free(tmp);
 		return (line);
 	}
@@ -48,7 +47,7 @@ static char	*ft_split_acc(char **accumulator)
 	return (line);
 }
 
-static void	ft_join_acc(char **accumulator, char *buf, int fd)
+static int	ft_join_acc(char **accumulator, char *buf, int fd)
 {
 	size_t	result;
 	char	*tmp;
@@ -70,6 +69,9 @@ static void	ft_join_acc(char **accumulator, char *buf, int fd)
 			break ;
 		result = read(fd, buf, BUFFER_SIZE);
 	}
+	if (!result)
+		return (1);
+	return (0);
 }
 
 char	*get_next_line(int fd)
@@ -83,8 +85,18 @@ char	*get_next_line(int fd)
 	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buf)
 		return (NULL);
-	ft_join_acc(&accumulator, buf, fd);
-	line = ft_split_acc(&accumulator);
+	if ((ft_join_acc(&accumulator, buf, fd) == 1) && (accumulator == NULL))
+		line = NULL;
+	else
+		line = ft_split_acc(&accumulator);
+	if (line)
+	{
+		if (line[0] == '\0')
+		{
+			free(line);
+			line = NULL;
+		}
+	}
 	if (buf)
 		free(buf);
 	return (line);
