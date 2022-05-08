@@ -6,7 +6,7 @@
 /*   By: alachris <alachris@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 02:43:44 by alachris          #+#    #+#             */
-/*   Updated: 2022/05/08 04:27:09 by alachris         ###   ########.fr       */
+/*   Updated: 2022/05/08 22:24:17 by alachris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static int	ft_join_acc(char **accumulator, char *buf, int fd)
 	char	*tmp;
 
 	result = read(fd, buf, BUFFER_SIZE);
-	while (result)
+	while ((result) && (result <= BUFFER_SIZE))
 	{
 		buf[result] = '\0';
 		if (*accumulator == NULL)
@@ -69,7 +69,7 @@ static int	ft_join_acc(char **accumulator, char *buf, int fd)
 			break ;
 		result = read(fd, buf, BUFFER_SIZE);
 	}
-	if (!result)
+	if ((!result) || (result > BUFFER_SIZE))
 		return (1);
 	return (0);
 }
@@ -80,7 +80,7 @@ char	*get_next_line(int fd)
 	char		*buf;
 	static char	*accumulator;
 
-	if ((fd < 0) || (BUFFER_SIZE <= 0))
+	if ((fd < 0) || (fd > 255) || (BUFFER_SIZE <= 0))
 		return (NULL);
 	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buf)
