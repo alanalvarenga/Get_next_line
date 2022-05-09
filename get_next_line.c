@@ -80,7 +80,7 @@ char	*get_next_line(int fd)
 	char		*buf;
 	static char	*accumulator;
 
-	if ((fd < 0) || (fd > 255) || (BUFFER_SIZE <= 0))
+	if ((fd < 0) || (fd > 256) || (BUFFER_SIZE <= 0))
 		return (NULL);
 	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buf)
