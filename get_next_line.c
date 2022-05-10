@@ -6,7 +6,7 @@
 /*   By: alachris <alachris@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 02:43:44 by alachris          #+#    #+#             */
-/*   Updated: 2022/05/08 22:24:17 by alachris         ###   ########.fr       */
+/*   Updated: 2022/05/10 14:38:59 by alachris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ char	*get_next_line(int fd)
 	char		*buf;
 	static char	*accumulator;
 
-	if ((fd < 0) || (fd > 256) || (BUFFER_SIZE <= 0))
+	if ((fd < 0) || (BUFFER_SIZE <= 0))
 		return (NULL);
 	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buf)
